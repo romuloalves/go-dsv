@@ -68,7 +68,7 @@ func TestSortFields(t *testing.T) {
 	assert.EqualValues(t, fieldsAssert, sortedFields, "Arrays should be equals")
 }
 
-func TestPadValueWithFiftyEmpty(t *testing.T) {
+func TestPaddingValueWithFiftyEmpty(t *testing.T) {
 	assertFieldValue := "                                         123456789"
 	fieldTest := field{
 		index:       1,
@@ -85,7 +85,7 @@ func TestPadValueWithFiftyEmpty(t *testing.T) {
 	assert.EqualValues(t, assertFieldValue, fieldWithPad, "Value should be with padding of 41 empty spaces")
 }
 
-func TestPadValueWithFourZeros(t *testing.T) {
+func TestPaddingValueWithFourZeros(t *testing.T) {
 	assertFieldValue := "0000123456789"
 	fieldTest := field{
 		index:       1,
@@ -102,7 +102,7 @@ func TestPadValueWithFourZeros(t *testing.T) {
 	assert.EqualValues(t, assertFieldValue, fieldWithPad, "Value should be with padding of 4 zeros")
 }
 
-func TestPadValueWithRightLength(t *testing.T) {
+func TestPaddingValueWithRightLength(t *testing.T) {
 	assertFieldValue := "123456789"
 	fieldTest := field{
 		index:       1,
@@ -119,7 +119,7 @@ func TestPadValueWithRightLength(t *testing.T) {
 	assert.EqualValues(t, assertFieldValue, fieldWithPad, "Value should keep unchanged")
 }
 
-func TestPadValueShouldNotAcceptPaddingCharWithMoreThanOneCharacter(t *testing.T) {
+func TestPaddingValueShouldNotAcceptPaddingCharWithMoreThanOneCharacter(t *testing.T) {
 	paddingCharErrorAssert := errors.New("The padding char should be one char length")
 	fieldTest := field{
 		index:       1,

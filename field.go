@@ -7,10 +7,11 @@ import (
 
 // field represents a field with data in a struct
 type field struct {
-	index       int
-	length      int
-	value       string
-	paddingChar string
+	index        int
+	length       int
+	value        string
+	paddingChar  string
+	paddingRight bool
 }
 
 // softFields will sort the fields by index
