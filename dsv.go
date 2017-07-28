@@ -1,17 +1,34 @@
 package dsv
 
-// Config represents a configuration to generate a dsv string
-type Config struct {
-	Separator string
-}
-
-// Tabbed represents a basic structure to generate a dsv string
-type Dsv struct {
-	Struct        interface{}
-	Configuration Config
-}
+import "errors"
 
 // ToDsv returns a dsv string from the struct
-func (t *Dsv) ToDsv() (string, error) {
-	return "", nil
+func ToDsv(i interface{}, separator string) (string, error) {
+	if i == nil {
+		return "", errors.New("The struct in the parameters can not be null")
+	}
+	fields, err := getFields(i)
+	if err != nil {
+		return "", err
+	}
+
+	sortedFields, err := sortFields(fields)
+	if err != nil {
+		return "", err
+	}
+
+	var responseLine string
+	for index := 0; index < len(sortedFields); index++ {
+		finalValue, err := padValue(sortedFields[index])
+		if err != nil {
+			return "", err
+		}
+
+		if index > 0 {
+			responseLine += separator
+		}
+		responseLine += finalValue
+	}
+
+	return responseLine, nil
 }
