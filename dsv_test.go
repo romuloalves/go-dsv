@@ -1,6 +1,10 @@
 package dsv
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/tj/assert"
+)
 
 func TestStructToDsv(t *testing.T) {
 	type myStruct struct {
@@ -73,4 +77,27 @@ func TestStructToDsvWithIndexes(t *testing.T) {
 	if dsv != assertValue {
 		t.Fatalf("Value of the line should be equals to \"%s\" and not \"%s\"", assertValue, dsv)
 	}
+}
+
+func TestDsvToStruct(t *testing.T) {
+	type myStruct struct {
+		FieldOne   string
+		FieldTwo   int
+		FieldThree bool
+	}
+
+	assertStruct := &myStruct{
+		FieldOne:   "fieldOneData",
+		FieldTwo:   123,
+		FieldThree: false,
+	}
+
+	dsv := "fieldOneData|123|false"
+
+	data, err := ToStruct(dsv, myStruct{}, "|")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.EqualValues(t, assertStruct, data, "Assert struct and returned struct from dsv should be equals")
 }
