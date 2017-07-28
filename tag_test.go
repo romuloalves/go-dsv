@@ -183,3 +183,74 @@ func TestGetFieldsWithIndexLengthAndPaddingChar(t *testing.T) {
 
 	assert.EqualValues(t, testAssert, fields, "Fields and assert should be equals")
 }
+
+func TestGetFieldsWithPaddingRight(t *testing.T) {
+	type myTestStruct struct {
+		Field string `paddingRight:"true"`
+	}
+
+	testAssert := make([]field, 0)
+	testAssert = append(testAssert, field{
+		value:        "1234",
+		index:        0,
+		length:       -1,
+		paddingRight: true,
+	})
+
+	test := &myTestStruct{Field: "1234"}
+
+	fields, err := getFields(test)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.EqualValues(t, testAssert, fields, "Fields and assert should be equals")
+}
+
+func TestGetFieldsWithIndexLengthPaddingCharAndPaddingRight(t *testing.T) {
+	type myTestStruct struct {
+		Field string `index:"1" length:"50" paddingChar:"|" paddingRight:"true"`
+	}
+
+	testAssert := make([]field, 0)
+	testAssert = append(testAssert, field{
+		value:        "1234",
+		index:        1,
+		length:       50,
+		paddingChar:  "|",
+		paddingRight: true,
+	})
+
+	test := &myTestStruct{Field: "1234"}
+
+	fields, err := getFields(test)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.EqualValues(t, testAssert, fields, "Fields and assert should be equals")
+}
+
+func TestGetFieldsWithIndexLengthPaddingCharAndDefaultPaddingRight(t *testing.T) {
+	type myTestStruct struct {
+		Field string `index:"1" length:"50" paddingChar:"|"`
+	}
+
+	testAssert := make([]field, 0)
+	testAssert = append(testAssert, field{
+		value:        "1234",
+		index:        1,
+		length:       50,
+		paddingChar:  "|",
+		paddingRight: false,
+	})
+
+	test := &myTestStruct{Field: "1234"}
+
+	fields, err := getFields(test)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.EqualValues(t, testAssert, fields, "Fields and assert should be equals")
+}

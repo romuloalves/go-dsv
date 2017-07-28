@@ -51,6 +51,12 @@ func padValue(f field) (string, error) {
 	}
 	lengthDiff := f.length - len(f.value)
 
-	newValue := strings.Repeat(f.paddingChar, lengthDiff) + f.value
+	newValue := strings.Repeat(f.paddingChar, lengthDiff)
+	if f.paddingRight {
+		newValue = f.value + newValue
+	} else {
+		newValue += f.value
+	}
+
 	return newValue, nil
 }

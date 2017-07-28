@@ -40,6 +40,13 @@ func getFields(st interface{}) ([]field, error) {
 		}
 		currentField.paddingChar = paddingCharFromTag
 
+		// Get the padding right tag
+		paddingRightFromTag, err := getBooleanTag(typeField.Tag, "paddingRight", false)
+		if err != nil {
+			return make([]field, 0), err
+		}
+		currentField.paddingRight = paddingRightFromTag
+
 		fields = append(fields, currentField)
 	}
 
