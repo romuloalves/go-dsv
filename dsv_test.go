@@ -19,7 +19,7 @@ func TestStructToDsv(t *testing.T) {
 		FieldFour:      0.43,
 	}
 
-	dsv, err := ToDsv(structData, "|")
+	dsv, err := StructToDSV(structData, "|")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -42,7 +42,7 @@ func TestStructToDsvWithStringPaddingLeftAndRight(t *testing.T) {
 		FieldPaddingRight: "FieldPaddingRight",
 	}
 
-	dsv, err := ToDsv(structData, "|")
+	dsv, err := StructToDSV(structData, "|")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -65,7 +65,7 @@ func TestStructToDsvWithIndexes(t *testing.T) {
 		FieldTwoButOne: "FieldTwoButOne",
 	}
 
-	dsv, err := ToDsv(structData, "|")
+	dsv, err := StructToDSV(structData, "|")
 	if err != nil {
 		t.Fatal(err)
 	}

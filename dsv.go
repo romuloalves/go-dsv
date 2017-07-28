@@ -2,8 +2,8 @@ package dsv
 
 import "errors"
 
-// ToDsv returns a dsv string from the struct
-func ToDsv(i interface{}, separator string) (string, error) {
+// StructToDSV returns a dsv string from the struct
+func StructToDSV(i interface{}, separator string) (string, error) {
 	if i == nil {
 		return "", errors.New("The struct in the parameters can not be null")
 	}
