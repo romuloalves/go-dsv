@@ -1,5 +1,10 @@
 package dsv
 
+import (
+	"errors"
+	"strings"
+)
+
 // field represents a field with data in a struct
 type field struct {
 	index       int
@@ -33,4 +38,18 @@ func sortFields(fields []field) ([]field, error) {
 		}
 	}
 	return sortedFields, nil
+}
+
+// padValue will return the value of the field with the right padding using paddingChar and length
+func padValue(f field) (string, error) {
+	if len(f.paddingChar) > 1 {
+		return f.value, errors.New("The padding char should be one char length")
+	}
+	if len(f.value) >= f.length {
+		return f.value, nil
+	}
+	lengthDiff := f.length - len(f.value)
+
+	newValue := strings.Repeat(f.paddingChar, lengthDiff) + f.value
+	return newValue, nil
 }
