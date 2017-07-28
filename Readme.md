@@ -11,14 +11,16 @@ type myTestStruct struct {
   FieldOne string `index:"1" length:"50" paddingChar:"0"`
   FieldTwo string `index:"3" length:"50"`
   FieldThree string `index:"2"`
+  FieldFour string `index:"1" length:"50" paddingChar:"0" paddingRight:"true"`
 }
 ```
 
 ### What tags are supported?
 
-- `index` represents the position of each field in the generated line.
-- `length` represents the length of the field in the line.
-- `paddingChar` represents what char will be placed in the empty space until the length be achieved. Default is empty space.
+- `index` represents the position of each field in the generated line. (Integer)
+- `length` represents the length of the field in the line. (Integer)
+- `paddingChar` represents what char will be placed in the empty space until the length be achieved. Default is empty space. (Can't have more than one character) (String – default " ")
+- `paddingRight` represents the side of the value that will receive the padding char. (Boolean – default False)
 
 ## License
 
