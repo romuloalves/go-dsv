@@ -1,6 +1,7 @@
 package dsv
 
 import (
+	"errors"
 	"reflect"
 	"strconv"
 )
@@ -66,4 +67,8 @@ func getIntegerTag(tag reflect.StructTag, fieldName string, defaultValue int) (i
 	responseInteger = fieldTagInteger
 
 	return responseInteger, nil
+}
+
+func getBooleanTag(tag reflect.StructTag, fieldName string, defaultValue bool) (bool, error) {
+	return false, errors.New("Not implemented error")
 }

@@ -20,12 +20,12 @@ func TestGetStringTag(t *testing.T) {
 	typeField := fields.Type().Field(0)
 
 	value, err := getStringTag(typeField.Tag, "type")
-	if value != testAssert {
-		t.Fatalf("The value of the field should be %s and not %s", testAssert, value)
-	}
-
 	if err != nil {
 		t.Fatal(err)
+	}
+
+	if value != testAssert {
+		t.Fatalf("The value of the field should be %s and not %s", testAssert, value)
 	}
 }
 
@@ -42,12 +42,12 @@ func TestGetIntegerTag(t *testing.T) {
 	typeField := fields.Type().Field(0)
 
 	value, err := getIntegerTag(typeField.Tag, "type", -1)
-	if value != testAssert {
-		t.Fatalf("The value of the field should be %d and not %d", testAssert, value)
-	}
-
 	if err != nil {
 		t.Fatal(err)
+	}
+
+	if value != testAssert {
+		t.Fatalf("The value of the field should be %d and not %d", testAssert, value)
 	}
 }
 
@@ -64,12 +64,56 @@ func TestGetIntegerTagWithDefaultValue(t *testing.T) {
 	typeField := fields.Type().Field(0)
 
 	value, err := getIntegerTag(typeField.Tag, "type", -1)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	if value != testAssert {
 		t.Fatalf("The value of the field should be %d and not %d", testAssert, value)
 	}
+}
 
+func TestGetBooleanTag(t *testing.T) {
+	type stringTest struct {
+		Abc string `type:"true"`
+	}
+
+	testAssert := true
+
+	testParam := &stringTest{Abc: "value"}
+
+	fields := reflect.ValueOf(testParam).Elem()
+	typeField := fields.Type().Field(0)
+
+	value, err := getBooleanTag(typeField.Tag, "type", true)
 	if err != nil {
 		t.Fatal(err)
+	}
+
+	if value != testAssert {
+		t.Fatalf("The value of the field should be %v and not %v", testAssert, value)
+	}
+}
+
+func TestGetBooleanTagWithDefaultValue(t *testing.T) {
+	type stringTest struct {
+		Abc string `type:""`
+	}
+
+	testAssert := false
+
+	testParam := &stringTest{Abc: "value"}
+
+	fields := reflect.ValueOf(testParam).Elem()
+	typeField := fields.Type().Field(0)
+
+	value, err := getBooleanTag(typeField.Tag, "type", false)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if value != testAssert {
+		t.Fatalf("The value of the field should be %v and not %v", testAssert, value)
 	}
 }
 
