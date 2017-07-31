@@ -1,262 +1,125 @@
 package dsv
 
 import (
-	"reflect"
 	"testing"
-
-	"github.com/tj/assert"
 )
 
-func TestGetStringTag(t *testing.T) {
-	type stringTest struct {
-		Abc string `type:"string"`
-	}
+func TestGetIndexFromTag(t *testing.T) {
+	testAssert := 3
+	testParam := []string{"3", "20"}
 
-	testAssert := "string"
+	index, err := getIndexFromTag(testParam)
 
-	testParam := &stringTest{Abc: "value"}
-
-	fields := reflect.ValueOf(testParam).Elem()
-	typeField := fields.Type().Field(0)
-
-	value, err := getStringTag(typeField.Tag, "type")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if value != testAssert {
-		t.Fatalf("The value of the field should be %s and not %s", testAssert, value)
+	if index != testAssert {
+		t.Fatalf("The value of the field should be %d and not %d", testAssert, index)
 	}
 }
 
-func TestGetIntegerTag(t *testing.T) {
-	type stringTest struct {
-		Abc string `type:"123"`
-	}
+func TestGetLengthFromTag(t *testing.T) {
+	testAssert := 20
+	testParam := []string{"3", "20"}
 
-	testAssert := 123
+	length, err := getLengthFromTag(testParam)
 
-	testParam := &stringTest{Abc: "value"}
-
-	fields := reflect.ValueOf(testParam).Elem()
-	typeField := fields.Type().Field(0)
-
-	value, err := getIntegerTag(typeField.Tag, "type", -1)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if value != testAssert {
-		t.Fatalf("The value of the field should be %d and not %d", testAssert, value)
+	if length != testAssert {
+		t.Fatalf("The value of the field should be %d and not %d", testAssert, length)
 	}
 }
 
-func TestGetIntegerTagWithDefaultValue(t *testing.T) {
-	type stringTest struct {
-		Abc string `type:""`
-	}
+func TestGetPaddingCharFromTag(t *testing.T) {
+	testAssert := "|"
+	testParam := []string{"3", "20", "|", "true"}
 
-	testAssert := -1
+	paddingChar, err := getPaddingCharFromTag(testParam, " ")
 
-	testParam := &stringTest{Abc: "value"}
-
-	fields := reflect.ValueOf(testParam).Elem()
-	typeField := fields.Type().Field(0)
-
-	value, err := getIntegerTag(typeField.Tag, "type", -1)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if value != testAssert {
-		t.Fatalf("The value of the field should be %d and not %d", testAssert, value)
+	if paddingChar != testAssert {
+		t.Fatalf("The value of the field should be %s and not %s", testAssert, paddingChar)
 	}
 }
 
-func TestGetBooleanTag(t *testing.T) {
-	type stringTest struct {
-		Abc string `type:"true"`
+func TestGetPaddingCharFromTagWithDefault(t *testing.T) {
+	testAssert := " "
+	testParam := []string{"3", "20", "-", "true"}
+
+	paddingChar, err := getPaddingCharFromTag(testParam, " ")
+
+	if err != nil {
+		t.Fatal(err)
 	}
 
+	if paddingChar != testAssert {
+		t.Fatalf("The value of the field should be %s and not %s", testAssert, paddingChar)
+	}
+}
+
+func TestGetPaddingCharFromTagEmptyWithDefault(t *testing.T) {
+	testAssert := " "
+	testParam := []string{"3", "20"}
+
+	paddingChar, err := getPaddingCharFromTag(testParam, " ")
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if paddingChar != testAssert {
+		t.Fatalf("The value of the field should be %s and not %s", testAssert, paddingChar)
+	}
+}
+
+func TestGetPaddingRightFromTag(t *testing.T) {
 	testAssert := true
+	testParam := []string{"3", "20", "|", "true"}
 
-	testParam := &stringTest{Abc: "value"}
+	paddingRight, err := getPaddingRightFromTag(testParam, false)
 
-	fields := reflect.ValueOf(testParam).Elem()
-	typeField := fields.Type().Field(0)
-
-	value, err := getBooleanTag(typeField.Tag, "type", true)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if value != testAssert {
-		t.Fatalf("The value of the field should be %v and not %v", testAssert, value)
+	if paddingRight != testAssert {
+		t.Fatalf("The value of the field should be %v and not %v", testAssert, paddingRight)
 	}
 }
 
-func TestGetBooleanTagWithDefaultValue(t *testing.T) {
-	type stringTest struct {
-		Abc string `type:""`
-	}
-
+func TestGetPaddingRightFromTagWithDefault(t *testing.T) {
 	testAssert := false
+	testParam := []string{"3", "20", "-", "-"}
 
-	testParam := &stringTest{Abc: "value"}
+	paddingRight, err := getPaddingRightFromTag(testParam, false)
 
-	fields := reflect.ValueOf(testParam).Elem()
-	typeField := fields.Type().Field(0)
-
-	value, err := getBooleanTag(typeField.Tag, "type", false)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if value != testAssert {
-		t.Fatalf("The value of the field should be %v and not %v", testAssert, value)
+	if paddingRight != testAssert {
+		t.Fatalf("The value of the field should be %v and not %v", testAssert, paddingRight)
 	}
 }
 
-func TestGetFieldsWithIndex(t *testing.T) {
-	type myTestStruct struct {
-		Field string `index:"1"`
-	}
+func TestGetPaddingRightFromTagEmptyWithDefault(t *testing.T) {
+	testAssert := false
+	testParam := []string{"3", "20"}
 
-	testAssert := []field{
-		field{
-			value:  "1234",
-			index:  1,
-			length: -1,
-		},
-	}
+	paddingRight, err := getPaddingRightFromTag(testParam, false)
 
-	test := &myTestStruct{Field: "1234"}
-
-	fields, err := getFields(test)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	assert.EqualValues(t, testAssert, fields, "Fields and assert should be equals")
-}
-
-func TestGetFieldsWithIndexAndLength(t *testing.T) {
-	type myTestStruct struct {
-		Field string `index:"1" length:"50"`
+	if paddingRight != testAssert {
+		t.Fatalf("The value of the field should be %v and not %v", testAssert, paddingRight)
 	}
-
-	testAssert := []field{
-		field{
-			value:  "1234",
-			index:  1,
-			length: 50,
-		},
-	}
-
-	test := &myTestStruct{Field: "1234"}
-
-	fields, err := getFields(test)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	assert.EqualValues(t, testAssert, fields, "Fields and assert should be equals")
-}
-
-func TestGetFieldsWithIndexLengthAndPaddingChar(t *testing.T) {
-	type myTestStruct struct {
-		Field string `index:"1" length:"50" paddingChar:"|"`
-	}
-
-	testAssert := []field{
-		field{
-			value:       "1234",
-			index:       1,
-			length:      50,
-			paddingChar: "|",
-		},
-	}
-
-	test := &myTestStruct{Field: "1234"}
-
-	fields, err := getFields(test)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	assert.EqualValues(t, testAssert, fields, "Fields and assert should be equals")
-}
-
-func TestGetFieldsWithPaddingRight(t *testing.T) {
-	type myTestStruct struct {
-		Field string `paddingRight:"true"`
-	}
-
-	testAssert := []field{
-		field{
-			value:        "1234",
-			index:        0,
-			length:       -1,
-			paddingRight: true,
-		},
-	}
-
-	test := &myTestStruct{Field: "1234"}
-
-	fields, err := getFields(test)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	assert.EqualValues(t, testAssert, fields, "Fields and assert should be equals")
-}
-
-func TestGetFieldsWithIndexLengthPaddingCharAndPaddingRight(t *testing.T) {
-	type myTestStruct struct {
-		Field string `index:"1" length:"50" paddingChar:"|" paddingRight:"true"`
-	}
-
-	testAssert := []field{
-		field{
-			value:        "1234",
-			index:        1,
-			length:       50,
-			paddingChar:  "|",
-			paddingRight: true,
-		},
-	}
-
-	test := &myTestStruct{Field: "1234"}
-
-	fields, err := getFields(test)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	assert.EqualValues(t, testAssert, fields, "Fields and assert should be equals")
-}
-
-func TestGetFieldsWithIndexLengthPaddingCharAndDefaultPaddingRight(t *testing.T) {
-	type myTestStruct struct {
-		Field string `index:"1" length:"50" paddingChar:"|"`
-	}
-
-	testAssert := []field{
-		field{
-			value:        "1234",
-			index:        1,
-			length:       50,
-			paddingChar:  "|",
-			paddingRight: false,
-		},
-	}
-
-	test := &myTestStruct{Field: "1234"}
-
-	fields, err := getFields(test)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	assert.EqualValues(t, testAssert, fields, "Fields and assert should be equals")
 }

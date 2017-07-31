@@ -8,6 +8,15 @@ import (
 	"strings"
 )
 
+const (
+	tagName      = "dsv"
+	tagSeparator = ","
+
+	// Default values in the tags
+	tagDefaultPaddingChar  = " "
+	tagDefaultPaddingRight = false
+)
+
 // field represents a field with data in a struct
 type field struct {
 	index        int
@@ -31,29 +40,38 @@ func getFields(st interface{}) ([]field, error) {
 			value: fmt.Sprintf("%v", valueField.Interface()),
 		}
 
+		// Get dsv tag
+		tagData := typeField.Tag.Get(tagName)
+		if len(tagData) == 0 {
+			// Field will not be included
+			continue
+		}
+
+		splittedTag := strings.Split(tagData, tagSeparator)
+
 		// Get the index
-		indexFromTag, err := getIntegerTag(typeField.Tag, "index", index)
+		indexFromTag, err := getIndexFromTag(splittedTag)
 		if err != nil {
 			return []field{}, err
 		}
 		currentField.index = indexFromTag
 
 		// Get length
-		lengthFromTag, err := getIntegerTag(typeField.Tag, "length", -1)
+		lengthFromTag, err := getLengthFromTag(splittedTag)
 		if err != nil {
 			return []field{}, err
 		}
 		currentField.length = lengthFromTag
 
 		// Get the padding character
-		paddingCharFromTag, err := getStringTag(typeField.Tag, "paddingChar")
+		paddingCharFromTag, err := getPaddingCharFromTag(splittedTag, tagDefaultPaddingChar)
 		if err != nil {
 			return []field{}, err
 		}
 		currentField.paddingChar = paddingCharFromTag
 
 		// Get the padding right tag
-		paddingRightFromTag, err := getBooleanTag(typeField.Tag, "paddingRight", false)
+		paddingRightFromTag, err := getPaddingRightFromTag(splittedTag, tagDefaultPaddingRight)
 		if err != nil {
 			return []field{}, err
 		}
