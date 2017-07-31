@@ -5,22 +5,28 @@
 
 ## How to use
 
-- Create a struct and include flags to each field. Example:
+- Create a struct and include the `dsv` tag in each field. Example:
 ```
 type myTestStruct struct {
-  FieldOne string `index:"1" length:"50" paddingChar:"0"`
-  FieldTwo string `index:"3" length:"50"`
-  FieldThree string `index:"2"`
-  FieldFour string `index:"1" length:"50" paddingChar:"0" paddingRight:"true"`
+  FieldOne string `dsv:"1,50,0"`
+  FieldTwo string `dsv:"3,50"`
+  FieldThree string `dsv:"2"`
+  FieldFour string `dsv:"1,50,0,true"`
 }
 ```
 
 ### What tags are supported?
 
+*The sequence below is the same of the flags in example of `How to use`.*
+
+*You NEED to include at least the `dsv` tag with the index or the field will not be written to the response.*
+
 - `index` represents the position of each field in the generated line. (Integer)
 - `length` represents the length of the field in the line. (Integer)
 - `paddingChar` represents what char will be placed in the empty space until the length be achieved. Default is empty space. (Can't have more than one character) (String – default " ")
 - `paddingRight` represents the side of the value that will receive the padding char. (Boolean – default False)
+
+*If you do not want to replace same default value, use `-`. Example:* `dsv:"1,30,-,true"`.
 
 ## License
 
