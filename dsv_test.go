@@ -2,12 +2,12 @@ package dsv
 
 import "testing"
 
-func TestStructToDsv(t *testing.T) {
+func TestStructToDsvWithNoFields(t *testing.T) {
 	type myStruct struct {
-		FieldOne       string
-		FieldNumberTwo int
-		FieldThree     bool
-		FieldFour      float32
+		FieldOne       string  `dsv:"1"`
+		FieldNumberTwo int     `dsv:"2"`
+		FieldThree     bool    `dsv:"3"`
+		FieldFour      float32 `dsv:"4"`
 	}
 
 	assertValue := "fieldOne|123|false|0.43"
@@ -31,8 +31,8 @@ func TestStructToDsv(t *testing.T) {
 
 func TestStructToDsvWithStringPaddingLeftAndRight(t *testing.T) {
 	type myStruct struct {
-		FieldPaddingLeft  string `length:"20" paddingChar:"1"`
-		FieldPaddingRight string `length:"27" paddingChar:"7" paddingRight:"true"`
+		FieldPaddingLeft  string `dsv:"1,20,1"`
+		FieldPaddingRight string `dsv:"2,27,7,true"`
 	}
 
 	assertValue := "1111FieldPaddingLeft|FieldPaddingRight7777777777"
@@ -54,8 +54,8 @@ func TestStructToDsvWithStringPaddingLeftAndRight(t *testing.T) {
 
 func TestStructToDsvWithIndexes(t *testing.T) {
 	type myStruct struct {
-		FieldTwo       string `index:"2"`
-		FieldTwoButOne string `index:"1"`
+		FieldTwo       string `dsv:"2"`
+		FieldTwoButOne string `dsv:"1"`
 	}
 
 	assertValue := "FieldTwoButOne|FieldTwo"
@@ -66,6 +66,29 @@ func TestStructToDsvWithIndexes(t *testing.T) {
 	}
 
 	dsv, err := StructToDSV(structData, "|")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if dsv != assertValue {
+		t.Fatalf("Value of the line should be equals to \"%s\" and not \"%s\"", assertValue, dsv)
+	}
+}
+
+func TestStructToDsvWithSameDefaultFlags(t *testing.T) {
+	type myStruct struct {
+		FieldOne string `dsv:"1,10,-,true"`
+		FieldTwo string `dsv:"2,11,=,false"`
+	}
+
+	assertValue := "FieldOne  ;===FieldTwo"
+
+	structData := &myStruct{
+		FieldOne: "FieldOne",
+		FieldTwo: "FieldTwo",
+	}
+
+	dsv, err := StructToDSV(structData, ";")
 	if err != nil {
 		t.Fatal(err)
 	}
