@@ -74,3 +74,26 @@ func TestStructToDsvWithIndexes(t *testing.T) {
 		t.Fatalf("Value of the line should be equals to \"%s\" and not \"%s\"", assertValue, dsv)
 	}
 }
+
+func TestStructToDsvWithSameDefaultFlags(t *testing.T) {
+	type myStruct struct {
+		FieldOne string `dsv:"1,10,-,true"`
+		FieldTwo string `dsv:"2,11,=,false"`
+	}
+
+	assertValue := "FieldOne  ;===FieldTwo"
+
+	structData := &myStruct{
+		FieldOne: "FieldOne",
+		FieldTwo: "FieldTwo",
+	}
+
+	dsv, err := StructToDSV(structData, ";")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if dsv != assertValue {
+		t.Fatalf("Value of the line should be equals to \"%s\" and not \"%s\"", assertValue, dsv)
+	}
+}
