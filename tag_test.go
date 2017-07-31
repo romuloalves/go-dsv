@@ -122,12 +122,13 @@ func TestGetFieldsWithIndex(t *testing.T) {
 		Field string `index:"1"`
 	}
 
-	testAssert := make([]field, 0)
-	testAssert = append(testAssert, field{
-		value:  "1234",
-		index:  1,
-		length: -1,
-	})
+	testAssert := []field{
+		field{
+			value:  "1234",
+			index:  1,
+			length: -1,
+		},
+	}
 
 	test := &myTestStruct{Field: "1234"}
 
@@ -144,12 +145,13 @@ func TestGetFieldsWithIndexAndLength(t *testing.T) {
 		Field string `index:"1" length:"50"`
 	}
 
-	testAssert := make([]field, 0)
-	testAssert = append(testAssert, field{
-		value:  "1234",
-		index:  1,
-		length: 50,
-	})
+	testAssert := []field{
+		field{
+			value:  "1234",
+			index:  1,
+			length: 50,
+		},
+	}
 
 	test := &myTestStruct{Field: "1234"}
 
@@ -166,13 +168,14 @@ func TestGetFieldsWithIndexLengthAndPaddingChar(t *testing.T) {
 		Field string `index:"1" length:"50" paddingChar:"|"`
 	}
 
-	testAssert := make([]field, 0)
-	testAssert = append(testAssert, field{
-		value:       "1234",
-		index:       1,
-		length:      50,
-		paddingChar: "|",
-	})
+	testAssert := []field{
+		field{
+			value:       "1234",
+			index:       1,
+			length:      50,
+			paddingChar: "|",
+		},
+	}
 
 	test := &myTestStruct{Field: "1234"}
 
@@ -189,13 +192,14 @@ func TestGetFieldsWithPaddingRight(t *testing.T) {
 		Field string `paddingRight:"true"`
 	}
 
-	testAssert := make([]field, 0)
-	testAssert = append(testAssert, field{
-		value:        "1234",
-		index:        0,
-		length:       -1,
-		paddingRight: true,
-	})
+	testAssert := []field{
+		field{
+			value:        "1234",
+			index:        0,
+			length:       -1,
+			paddingRight: true,
+		},
+	}
 
 	test := &myTestStruct{Field: "1234"}
 
@@ -212,14 +216,15 @@ func TestGetFieldsWithIndexLengthPaddingCharAndPaddingRight(t *testing.T) {
 		Field string `index:"1" length:"50" paddingChar:"|" paddingRight:"true"`
 	}
 
-	testAssert := make([]field, 0)
-	testAssert = append(testAssert, field{
-		value:        "1234",
-		index:        1,
-		length:       50,
-		paddingChar:  "|",
-		paddingRight: true,
-	})
+	testAssert := []field{
+		field{
+			value:        "1234",
+			index:        1,
+			length:       50,
+			paddingChar:  "|",
+			paddingRight: true,
+		},
+	}
 
 	test := &myTestStruct{Field: "1234"}
 
@@ -236,14 +241,15 @@ func TestGetFieldsWithIndexLengthPaddingCharAndDefaultPaddingRight(t *testing.T)
 		Field string `index:"1" length:"50" paddingChar:"|"`
 	}
 
-	testAssert := make([]field, 0)
-	testAssert = append(testAssert, field{
-		value:        "1234",
-		index:        1,
-		length:       50,
-		paddingChar:  "|",
-		paddingRight: false,
-	})
+	testAssert := []field{
+		field{
+			value:        "1234",
+			index:        1,
+			length:       50,
+			paddingChar:  "|",
+			paddingRight: false,
+		},
+	}
 
 	test := &myTestStruct{Field: "1234"}
 
