@@ -84,17 +84,19 @@ func TestDsvToStruct(t *testing.T) {
 		FieldOne   string
 		FieldTwo   int
 		FieldThree bool
+		FieldFour  float32
 	}
 
 	assertStruct := &myStruct{
 		FieldOne:   "fieldOneData",
 		FieldTwo:   123,
 		FieldThree: false,
+		FieldFour:  43.34,
 	}
 
-	dsv := "fieldOneData|123|false"
+	dsv := "fieldOneData|123|false|43.34"
 
-	data, err := ToStruct(dsv, myStruct{}, "|")
+	data, err := ToStruct(dsv, &myStruct{}, "|")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -43,12 +43,12 @@ func StructToDSV(i interface{}, separator string) (string, error) {
 }
 
 // ToStruct returns an interface based in the dsv data, the struct interface and the separator
-func ToStruct(dsv string, structInterface interface{}, separator string) (interface{}, error) {
+func ToStruct(dsv string, i interface{}, separator string) (interface{}, error) {
 	// Validating inputs
 	if len(dsv) == 0 {
 		return nil, errors.New("DSV data can not be empty")
 	}
-	if structInterface == nil {
+	if i == nil {
 		return nil, errors.New("Interface of struct can not be null")
 	}
 	if len(separator) == 0 {
@@ -56,25 +56,34 @@ func ToStruct(dsv string, structInterface interface{}, separator string) (interf
 	}
 
 	// Processing data
-	fields, err := getFields(structInterface)
+	fields, err := getFields(i)
 	if err != nil {
 		return nil, err
 	}
-
-	sortedFields, err := sortFields(fields)
-	if err != nil {
-		return nil, err
-	}
+	fieldsLength := len(fields)
 
 	splittedData := strings.Split(dsv, separator)
+	splittedDataLength := len(splittedData)
 
 	// Validating the fields and the quantity of data in the dsv
-	if len(splittedData) != len(sortedFields) {
+	if splittedDataLength != fieldsLength {
 		return nil, errors.New("Struct fields and dsv data have different lengths")
 	}
 
 	// Put data in the fields
-	for index := 0; index < len(sortedFields); index++ {
-		sortedFields[index].value = strings.Trim(splittedData[index], " ")
+	for dataIndex := 0; dataIndex < splittedDataLength; dataIndex++ {
+		for fieldIndex := 0; fieldIndex < fieldsLength; fieldIndex++ {
+			if fields[fieldIndex].index != dataIndex {
+				continue
+			}
+			fields[fieldIndex].value = strings.Trim(splittedData[dataIndex], " ")
+		}
 	}
+
+	interfaceWithData, err := setFieldsToStruct(fields, i)
+	if err != nil {
+		return nil, err
+	}
+
+	return interfaceWithData, nil
 }

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strconv"
 	"strings"
 )
 
@@ -109,4 +110,46 @@ func padValue(f field) (string, error) {
 	}
 
 	return newValue, nil
+}
+
+func setFieldsToStruct(fields []field, i interface{}) (interface{}, error) {
+	values := reflect.ValueOf(i).Elem()
+
+	fieldsLength := len(fields)
+
+	for index := 0; index < fieldsLength; index++ {
+		fieldValue := fields[index].value
+		element := values.Field(index)
+		if !element.CanSet() {
+			continue
+		}
+		switch element.Kind() {
+		case reflect.String:
+			element.SetString(fieldValue)
+			break
+		case reflect.Int:
+			integer, err := strconv.ParseInt(fieldValue, 10, 0)
+			if err != nil {
+				return nil, err
+			}
+			element.SetInt(integer)
+			break
+		case reflect.Float32, reflect.Float64:
+			float, err := strconv.ParseFloat(fieldValue, 0)
+			if err != nil {
+				return nil, err
+			}
+			element.SetFloat(float)
+			break
+		case reflect.Bool:
+			boolean, err := strconv.ParseBool(fieldValue)
+			if err != nil {
+				return nil, err
+			}
+			element.SetBool(boolean)
+			break
+		}
+	}
+
+	return i, nil
 }
