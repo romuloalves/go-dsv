@@ -18,7 +18,7 @@ type field struct {
 
 // getFields returns all fields of a struct
 func getFields(st interface{}) ([]field, error) {
-	fields := make([]field, 0)
+	var fields []field
 
 	values := reflect.ValueOf(st).Elem()
 
@@ -33,28 +33,28 @@ func getFields(st interface{}) ([]field, error) {
 		// Get the index
 		indexFromTag, err := getIntegerTag(typeField.Tag, "index", index)
 		if err != nil {
-			return make([]field, 0), err
+			return []field{}, err
 		}
 		currentField.index = indexFromTag
 
 		// Get length
 		lengthFromTag, err := getIntegerTag(typeField.Tag, "length", -1)
 		if err != nil {
-			return make([]field, 0), err
+			return []field{}, err
 		}
 		currentField.length = lengthFromTag
 
 		// Get the padding character
 		paddingCharFromTag, err := getStringTag(typeField.Tag, "paddingChar")
 		if err != nil {
-			return make([]field, 0), err
+			return []field{}, err
 		}
 		currentField.paddingChar = paddingCharFromTag
 
 		// Get the padding right tag
 		paddingRightFromTag, err := getBooleanTag(typeField.Tag, "paddingRight", false)
 		if err != nil {
-			return make([]field, 0), err
+			return []field{}, err
 		}
 		currentField.paddingRight = paddingRightFromTag
 
