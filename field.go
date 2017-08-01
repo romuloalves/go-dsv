@@ -19,6 +19,7 @@ const (
 
 // field represents a field with data in a struct
 type field struct {
+	fieldName    string
 	index        int
 	length       int
 	value        string
@@ -37,7 +38,8 @@ func getFields(st interface{}) ([]field, error) {
 		typeField := values.Type().Field(index)
 
 		currentField := field{
-			value: fmt.Sprintf("%v", valueField.Interface()),
+			fieldName: typeField.Name,
+			value:     fmt.Sprintf("%v", valueField.Interface()),
 		}
 
 		// Get dsv tag
@@ -130,6 +132,7 @@ func padValue(f field) (string, error) {
 	return newValue, nil
 }
 
+// setFieldsToStruct will set the values in the interface with the fields data
 func setFieldsToStruct(fields []field, i interface{}) (interface{}, error) {
 	values := reflect.ValueOf(i).Elem()
 
@@ -137,7 +140,9 @@ func setFieldsToStruct(fields []field, i interface{}) (interface{}, error) {
 
 	for index := 0; index < fieldsLength; index++ {
 		fieldValue := fields[index].value
-		element := values.Field(index)
+		fieldName := fields[index].fieldName
+
+		element := values.FieldByName(fieldName)
 		if !element.CanSet() {
 			continue
 		}
