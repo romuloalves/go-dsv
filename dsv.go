@@ -65,11 +65,6 @@ func ToStruct(dsv string, i interface{}, separator string) (interface{}, error) 
 	splittedData := strings.Split(dsv, separator)
 	splittedDataLength := len(splittedData)
 
-	// Validating the fields and the quantity of data in the dsv
-	if splittedDataLength != fieldsLength {
-		return nil, errors.New("Struct fields and dsv data have different lengths")
-	}
-
 	// Put data in the fields
 	for dataIndex := 0; dataIndex < splittedDataLength; dataIndex++ {
 		for fieldIndex := 0; fieldIndex < fieldsLength; fieldIndex++ {

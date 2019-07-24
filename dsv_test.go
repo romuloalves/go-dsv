@@ -127,3 +127,26 @@ func TestDsvToStruct(t *testing.T) {
 
 	assert.EqualValues(t, assertStruct, data, "Assert struct and returned struct from dsv should be equals")
 }
+
+func TestDsvToStructWithoutAllFields(t *testing.T) {
+	type myStruct struct {
+		FieldOne  string  `dsv:"0"`
+		FieldTwo  int     `dsv:"1"`
+		FieldFour float32 `dsv:"3"`
+	}
+
+	assertStruct := &myStruct{
+		FieldOne:  "fieldOneData",
+		FieldTwo:  123,
+		FieldFour: 43.34,
+	}
+
+	dsv := "fieldOneData|123|false|43.34"
+
+	data, err := ToStruct(dsv, &myStruct{}, "|")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.EqualValues(t, assertStruct, data, "Assert struct and returned struct from dsv should be equals")
+}
