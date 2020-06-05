@@ -1,13 +1,11 @@
 # GO-DSV
-> A delimited separated values package for Golang that generate a single line with structs data
-
-**Under development**
+> A delimited separated values package for Golang that generate or read a single line
 
 ## How to use
 
-- Create a struct and include the `dsv` tag in each field. Example:
+- Create a struct and include the `dsv` tag in each field. For example:
 ```
-type myTestStruct struct {
+type MyTestStruct struct {
   FieldOne string `dsv:"1,50,0"`
   FieldTwo string `dsv:"3,50"`
   FieldThree string `dsv:"2"`
@@ -17,16 +15,16 @@ type myTestStruct struct {
 
 ### What tags are supported?
 
-*The sequence below is the same of the flags in example of `How to use`.*
+*In order to write or read, you need to add the `dsv` tag to the fields containing at least their indexes.*
 
-*You NEED to include at least the `dsv` tag with the index or the field will not be written to the response.*
+Tag values order:
 
-- `index` represents the position of each field in the generated line. (Integer)
-- `length` represents the length of the field in the line. (Integer)
-- `paddingChar` represents what char will be placed in the empty space until the length be achieved. Default is empty space. (Can't have more than one character) (String – default " ")
-- `paddingRight` represents the side of the value that will receive the padding char. (Boolean – default False)
+1. `index`: represents the position of the field in the line. (Integer)
+2. `length`: represents the length of the field in the line. (Integer)
+3. `paddingChar`: represents what char that is/will be placed in the empty spaces until the length be achieved. The default value is an empty space. (Can't have more than one character) (String – default " ")
+4. `paddingRight`: represents the side of the value that contains/will receive the padding char. (Boolean – default False)
 
-*If you do not want to replace same default value, use `-`. Example:* `dsv:"1,30,-,true"`.
+*If you do not want to replace some default value, use `-` instead. Example:* `dsv:"1,30,-,true"`.
 
 ## License
 
